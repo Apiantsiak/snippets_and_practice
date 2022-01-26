@@ -4,17 +4,19 @@ from typing import List
 
 
 DECIMAL_IP: str = "192.168.156.3"
-CIDR: str = "32"
+PREFIX: str = "21"
 
 
 # CIDR notation to binary subnet mask
 
 
-def cidr_to_binary(cidr: str) -> str:
+def prefix_to_cidr(cidr: str) -> str:
     """Convert CIDR notation to binary subnet mask
-        :param cidr: str
-        :return: str
-        """
+
+    :param cidr: str
+    :return: str
+    """
+
     zero_scope: int = 32 - int(cidr)
     binary_cidr: str = "1" * int(cidr) + "0" * zero_scope
     ls = list(binary_cidr)
@@ -32,6 +34,7 @@ def cidr_to_binary(cidr: str) -> str:
 
 def decimal_to_binary(decimal_ip: str) -> str:
     """Convert decimal to binary
+
     :param decimal_ip: str
     :return: str
     """
@@ -54,6 +57,7 @@ def decimal_to_binary(decimal_ip: str) -> str:
 
 def binary_to_decimal(binary_ip: str) -> str:
     """Convert binary to decimal
+
     :param binary_ip: str
     :return: str
     """
@@ -70,3 +74,51 @@ def binary_to_decimal(binary_ip: str) -> str:
     decimal_ip = ".".join(decimal_vals)
 
     return decimal_ip
+
+
+# Network ID calculation
+
+
+def network_id_func(binary_ip: str, binary_cidr: str) -> str:
+    """Calculate network id (add together binary ip with cidr)
+    using method 1 and 1 = 1 else 0
+
+    :param binary_ip: str
+    :param binary_cidr: str
+    :return: str
+    """
+
+    network_id_ls = []
+    for pos in range(len(binary_ip)):
+        if binary_ip[pos] == ".":
+            network_id_ls.append(".")
+        elif int(binary_ip[pos]) and int(binary_cidr[pos]):
+            network_id_ls.append("1")
+        else:
+            network_id_ls.append("0")
+
+    bin_network_id = "".join(network_id_ls)
+
+    return bin_network_id
+
+
+# Number IP addresses
+
+
+def calculate_numb_ip(prefix: str) -> str:
+    """Calculate number IP using formula '2**(32-prefix)-2'
+
+    :param prefix: str
+    :return: str
+    """
+
+    numbs_ip = str(2 ** (32 - int(prefix)) - 2)
+    return numbs_ip
+
+
+bin_cidr: str = prefix_to_cidr(PREFIX)
+bin_ip: str = decimal_to_binary(DECIMAL_IP)
+dec_sub_mask: str = binary_to_decimal(bin_cidr)
+
+print(bin_ip, bin_cidr, dec_sub_mask, sep="\n")
+print(binary_to_decimal(network_id_func(bin_ip, bin_cidr)), PREFIX, sep="/")
