@@ -2,26 +2,32 @@
 
 from typing import List
 
-# Decimal to binary
-
 
 DECIMAL_IP: str = "192.168.156.3"
 CIDR: str = "32"
 
 
+# CIDR notation to binary subnet mask
+
+
 def cidr_to_binary(cidr: str) -> str:
     """Convert CIDR notation to binary subnet mask
-    :param cidr: str
-    :return: str
-    """
+        :param cidr: str
+        :return: str
+        """
     zero_scope: int = 32 - int(cidr)
     binary_cidr: str = "1" * int(cidr) + "0" * zero_scope
     ls = list(binary_cidr)
+
     for pos, _ in enumerate(ls):
         if pos in [8, 17, 26]:
             ls.insert(pos, ".")
     binary_cidr = "".join(ls)
+
     return binary_cidr
+
+
+# Decimal to binary
 
 
 def decimal_to_binary(decimal_ip: str) -> str:
@@ -41,9 +47,6 @@ def decimal_to_binary(decimal_ip: str) -> str:
     binary_ip = ".".join(bin_vals)
 
     return binary_ip
-
-
-BINARY_IP: str = decimal_to_binary(DECIMAL_IP)
 
 
 # Binary to Decimal
@@ -67,9 +70,3 @@ def binary_to_decimal(binary_ip: str) -> str:
     decimal_ip = ".".join(decimal_vals)
 
     return decimal_ip
-
-
-print(BINARY_IP)
-print(binary_to_decimal(BINARY_IP))
-print(cidr_to_binary(CIDR))
-print(binary_to_decimal(cidr_to_binary(CIDR)))
