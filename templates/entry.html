@@ -4,14 +4,19 @@
 
 <h2>{{ the_title }}</h2>
 
-<form method='POST' action='/search4'>
+<form method='POST' action='/result'>
 <table>
-<p>Use this form to submit a search request:</p>
-<tr><td>Phrase:</td><td><input name='phrase' type='TEXT' width='60'></td></tr>
-<tr><td>Letters:</td><td><input name='letters' type='TEXT' value='aeiou'></td></tr>
+    <tr><td>IP address:</td><td>
+        <label for='ip_address'>
+        <input id='ip_address' name='ip_address' type='TEXT' width='60'></label>
+    </td></tr>
+    <tr><td>Subnet mask:</td><td>
+        <label for='prefix'>
+        <input id='prefix' name='prefix' type='TEXT'></label>
+    </td></tr>
 </table>
 <p>When you're ready, click this button:</p>
-<p><input value='Do it!' type='SUBMIT'></p>
+<p><input value='Calculate!' type='SUBMIT'></p>
 </form>
 
 {% endblock %}

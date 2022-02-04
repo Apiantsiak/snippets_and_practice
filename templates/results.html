@@ -6,12 +6,11 @@
 
 <p>You submitted the following data:</p>
 <table>
-<tr><td>Phrase:</td><td>{{ the_phrase }}</td></tr>
-<tr><td>Letters:</td><td>{{ the_letters }}</td></tr>
+<tr><td>IP address:</td><td>{{ the_ip_address }}</td></tr>
+<tr><td>Subnet mask:</td><td>{{ the_prefix }}</td></tr>
 </table>
 
-<p>When "{{the_phrase }}" is searched for "{{ the_letters }}", the following 
-results are returned:</p>
+<p>Subnet attributes:</p>
 <h3>{{ the_results }}</h3>
 
 {% endblock %}
