@@ -1,18 +1,41 @@
-from flask import Flask
-from func_temp import network_id
+
+from flask import Flask, render_template, request
+from subnet_calculation import *
 
 
 app = Flask(__name__)
 
 
 @app.route("/")
-def take_ip() -> str:
-    return "Enter ip"
+@app.route("/entry", methods=['GET', 'POST'])
+def entry_page() -> 'html':
+
+    return render_template('entry.html',
+                           the_title='IP CALCULATOR')
 
 
-@app.route("/network_id")
-def show_network() -> str:
-    return network_id("127.0.0.1", "24")
+@app.route("/result", methods=['POST'])
+def calculate_res() -> 'html':
+
+    title = "Here are your results"
+    ip_address = request.form['ip_address']
+    prefix = request.form['prefix']
+    subnet = Subnet(ip_address, prefix)
+    subnet.calculate()
+
+    return render_template('results.html',
+                           the_title=title,
+                           the_ip_address=ip_address,
+                           the_prefix=prefix,
+                           the_network_id=subnet.SUBNET_INFO[subnet.address]["Network ID"],
+                           the_net_cidr=subnet.SUBNET_INFO[subnet.address]["Netmask/CIDR"],
+                           the_wildcard=subnet.SUBNET_INFO[subnet.address]["Wildcard"],
+                           the_broadcast_ip=subnet.SUBNET_INFO[subnet.address]["Broadcast IP"],
+                           the_first_ip=subnet.SUBNET_INFO[subnet.address]["First IP"],
+                           the_last_ip=subnet.SUBNET_INFO[subnet.address]["Last IP"],
+                           the_next_network=subnet.SUBNET_INFO[subnet.address]["Next Network ID"],
+                           the_hosts=subnet.SUBNET_INFO[subnet.address]["Hosts"],)
 
 
-app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
