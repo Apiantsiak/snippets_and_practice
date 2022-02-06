@@ -1,8 +1,4 @@
 
-SUBNET_IP: str = "192.168.156.3"
-PREFIX: str = "10"
-
-
 def convert_to_bin(decimal_val: str) -> str:
     binary_val_ls = [bin(int(val))[2:] for val in decimal_val.split(".")]
 
@@ -183,3 +179,11 @@ class Subnet:
             print(f"\n{self.address} attributes:\n")
             for key, val in self.SUBNET_INFO[self._address].items():
                 print(f"{key}:{' ' * (16 - len(key))}{val}")
+
+
+if __name__ == "__main__":
+    SUBNET_IP: str = "192.168.156.3"
+    PREFIX: str = "10"
+    sub = Subnet(SUBNET_IP, PREFIX)
+    sub.calculate()
+    print(list(sub.SUBNET_INFO[sub.address].items()))
