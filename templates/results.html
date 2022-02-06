@@ -6,21 +6,22 @@
 
 <form method='POST' action='/entry'>
 <p>You submitted the following data:</p>
+
 <table>
 <tr><td>IP address:</td><td>{{ the_ip_address }}</td></tr>
 <tr><td>Subnet mask:</td><td>{{ the_prefix }}</td></tr>
 </table>
 
 <p>Subnet attributes:</p>
+
 <table>
-<tr><td>Network ID:</td><td>{{ the_network_id }}</td></tr>
-<tr><td>Netmask/CIDR:</td><td>{{ the_net_cidr }}</td></tr>
-<tr><td>Wildcard:</td><td>{{ the_wildcard }}</td></tr>
-<tr><td>Broadcast IP:</td><td>{{ the_broadcast_ip }}</td></tr>
-<tr><td>First IP:</td><td>{{ the_first_ip }}</td></tr>
-<tr><td>Last IP:</td><td>{{ the_last_ip }}</td></tr>
-<tr><td>Next Network ID:</td><td>{{ the_next_network }}</td></tr>
-<tr><td>Hosts:</td><td>{{ the_hosts }}</td></tr>
+    {% for row in the_data %}
+    <tr>
+        {% for item in row %}
+        <td>{{ item }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
 </table>
 <h3>{{ the_results }}</h3>
     <p><input value="Back" type="submit"></p>

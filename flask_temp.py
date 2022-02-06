@@ -28,19 +28,13 @@ def calculate_res() -> "html":
     prefix = request.form["prefix"]
     subnet = Subnet(ip_address, prefix)
     subnet.calculate()
+    result = subnet.SUBNET_INFO[subnet.address].items()
     log_request(request, "; ".join(subnet.SUBNET_INFO[subnet.address].values()))
     return render_template("results.html",
                            the_title=title,
                            the_ip_address=ip_address,
                            the_prefix=prefix,
-                           the_network_id=subnet.SUBNET_INFO[subnet.address]["Network ID"],
-                           the_net_cidr=subnet.SUBNET_INFO[subnet.address]["Netmask/CIDR"],
-                           the_wildcard=subnet.SUBNET_INFO[subnet.address]["Wildcard"],
-                           the_broadcast_ip=subnet.SUBNET_INFO[subnet.address]["Broadcast IP"],
-                           the_first_ip=subnet.SUBNET_INFO[subnet.address]["First IP"],
-                           the_last_ip=subnet.SUBNET_INFO[subnet.address]["Last IP"],
-                           the_next_network=subnet.SUBNET_INFO[subnet.address]["Next Network ID"],
-                           the_hosts=subnet.SUBNET_INFO[subnet.address]["Hosts"],)
+                           the_data=result,)
 
 
 @app.route("/viewlog", methods=["GET", "POST"])
