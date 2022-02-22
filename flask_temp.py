@@ -1,7 +1,10 @@
 
-from flask import Flask, render_template, request
+
+from flask import Flask, render_template, request, session
+
 from subnet_calculation import Subnet
 from DB_context_mng import UseDataBase
+from checker import check_logged_in
 
 
 app = Flask(__name__)
@@ -11,6 +14,18 @@ app.config["dbconfig"] = {"host": "127.0.0.1",
                           "password": "153624",
                           "database": "subnet_logDB",
                           }
+
+
+@app.route("/login")
+def do_log_in() -> str:
+    session["logged_in"] = True
+    return "You are now logged in."
+
+
+@app.route("/logout")
+def do_log_out() -> str:
+    session.pop("logged_in")
+    return "You are now logged out."
 
 
 @app.route("/")
@@ -61,6 +76,7 @@ def calculate_res() -> "html":
 
 
 @app.route("/viewlog", methods=["GET", "POST"])
+@check_logged_in
 def view_the_log() -> "html":
 
     with UseDataBase(app.config["dbconfig"]) as cursor:
@@ -76,6 +92,8 @@ def view_the_log() -> "html":
                            the_data=contents,
                            )
 
+
+app.secret_key = "MayTheForceBeWithYou"
 
 if __name__ == '__main__':
     app.run(debug=True)
