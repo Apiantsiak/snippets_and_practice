@@ -1,4 +1,4 @@
-
+"""This module allows use context manager with mysql connector"""
 
 import mysql.connector
 

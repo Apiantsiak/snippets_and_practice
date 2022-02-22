@@ -1,5 +1,16 @@
+"""This module includes all the necessary methods and functions
+to calculate subnet attributes from IP address and prefix"""
+
+
+from typing import Dict
+
 
 def convert_to_bin(decimal_val: str) -> str:
+    """Convert decimal number to binary value
+
+    :param decimal_val: str
+    :return: str
+    """
     binary_val_ls = [bin(int(val))[2:] for val in decimal_val.split(".")]
 
     for pos, val in enumerate(binary_val_ls):
@@ -13,7 +24,11 @@ def convert_to_bin(decimal_val: str) -> str:
 
 
 def convert_to_dec(binary_val: str) -> str:
+    """Convert binary value to decimal number
 
+    :param binary_val:
+    :return:
+    """
     binary_vals_ls = binary_val.split(".")
     decimal_vals = []
 
@@ -29,9 +44,10 @@ def convert_to_dec(binary_val: str) -> str:
 
 
 class Subnet:
-    SUBNET_INFO = {}
 
-    def __init__(self, subnet_ip: str, prefix: str):
+    SUBNET_INFO: Dict[str:Dict[str:str]] = {}
+
+    def __init__(self, subnet_ip: str, prefix: str) -> None:
         self._ip = subnet_ip
         self._prefix = prefix
         self._address = f"{subnet_ip}/{prefix}"
@@ -45,12 +61,16 @@ class Subnet:
         return self._prefix
 
     @property
-    def address(self):
+    def address(self) -> str:
         return self._address
 
     @property
     def cidr(self, total_numb_bits: int = 32) -> str:
+        """Convert prefix to classless inter-domain routing (cidr) binary value
 
+        :param total_numb_bits: str
+        :return: str
+        """
         host_bits = total_numb_bits - int(self.prefix)
         subnet_mask_bin = ["1" for _ in range(int(self.prefix))]
         subnet_mask_bin.extend(["0" for _ in range(host_bits)])
@@ -65,7 +85,10 @@ class Subnet:
 
     @property
     def wildcard(self) -> str:
+        """Calculate wildcard value using cidr binary value
 
+        :return: str
+        """
         subnet_mask_ls = self.cidr.split(".")
 
         wildcard_ls = []
@@ -84,7 +107,10 @@ class Subnet:
 
     @property
     def network_id(self) -> str:
+        """Calculate subnet IP address and convert it to decimal interpretation
 
+        :return: str
+        """
         binary_ip = convert_to_bin(self.ip)
         binary_cidr = self.cidr
 
@@ -103,6 +129,10 @@ class Subnet:
 
     @property
     def broadcast_ip(self) -> str:
+        """Calculate last IP address of a subnet
+
+        :return: str
+        """
         net_dec_vals = self.network_id.split(".")
         wildcard_dec_vals = convert_to_dec(self.wildcard).split(".")
 
@@ -116,6 +146,10 @@ class Subnet:
 
     @property
     def next_network_id(self) -> str:
+        """Calculate IP address of a next subnet
+
+        :return: str
+        """
         broad_vals = self.broadcast_ip.split(".")
 
         next_net_vals = []
@@ -131,6 +165,10 @@ class Subnet:
 
     @property
     def first_sub_ip(self) -> str:
+        """Calculate IP address after the network ID
+
+        :return: str
+        """
         net_vals = self.network_id.split(".")
         reserved_ip = "0.0.0.1"
 
@@ -144,6 +182,10 @@ class Subnet:
 
     @property
     def last_sub_ip(self) -> str:
+        """Calculate IP address before the broadcast IP
+
+        :return: str
+        """
         broad_vals = self.broadcast_ip.split(".")
         reserved_ip = "0.0.0.1"
         last_ip_vals = [str(int(broad_val) - int(reserved_ip.split(".")[pos]))
@@ -156,12 +198,21 @@ class Subnet:
 
     @property
     def hosts_numb(self) -> str:
+        """Calculate number of allocatable IP addresses
+
+        :return: str
+        """
         hosts = str(2 ** (32 - int(self.prefix)) - 2)
 
         return hosts
 
-    def calculate(self, print_out: str = None):
+    def calculate(self, print_out: str = None) -> None:
+        """Calculate and organize all subnet attributes into a dictionary
+        and output them if the "print_out" attribute is equal to "p"
 
+        :param print_out: str
+        :return: None
+        """
         if len(self.SUBNET_INFO) > 5:
             self.SUBNET_INFO.clear()
 

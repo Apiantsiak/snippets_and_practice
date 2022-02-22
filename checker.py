@@ -1,4 +1,4 @@
-
+"""This module includes a decorator function that checks the user's authorization."""
 
 from flask import session
 from functools import wraps
