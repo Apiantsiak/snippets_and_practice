@@ -2,9 +2,6 @@
 to calculate subnet attributes from IP address and prefix"""
 
 
-from typing import Dict
-
-
 def convert_to_bin(decimal_val: str) -> str:
     """Convert decimal number to binary value
 
@@ -45,7 +42,7 @@ def convert_to_dec(binary_val: str) -> str:
 
 class Subnet:
 
-    SUBNET_INFO: Dict[str:Dict[str:str]] = {}
+    SUBNET_INFO = {}
 
     def __init__(self, subnet_ip: str, prefix: str) -> None:
         self._ip = subnet_ip
