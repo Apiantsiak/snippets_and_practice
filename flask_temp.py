@@ -30,15 +30,23 @@ def do_log_out() -> str:
 
 @app.route("/")
 @app.route("/entry", methods=["GET", "POST"])
-def entry_page() -> "html":
+def entry_page():
+    """Display webapp's HTML form
 
+    :return: html
+    """
     return render_template("entry.html",
                            the_title="IP CALCULATOR",
                            )
 
 
-def log_request(req: "flask_request", res: str) -> None:
+def log_request(req, res: str) -> None:
+    """Log details of the web request and the results
 
+    :param req: flask_request
+    :param res: str
+    :return: None
+    """
     with UseDataBase(app.config["dbconfig"]) as cursor:
 
         _SQL = """insert into log
@@ -57,8 +65,11 @@ def log_request(req: "flask_request", res: str) -> None:
 
 
 @app.route("/result", methods=["POST"])
-def calculate_res() -> "html":
+def calculate_res():
+    """Extract the posted data; perform the calculation; return results
 
+    :return: html
+    """
     title = "Here are your results"
     ip_address = request.form["ip_address"]
     prefix = request.form["prefix"]
@@ -77,8 +88,11 @@ def calculate_res() -> "html":
 
 @app.route("/viewlog", methods=["GET", "POST"])
 @check_logged_in
-def view_the_log() -> "html":
+def view_the_log():
+    """Display the contents of the log table from subnet_logDB database as HTML table
 
+    :return: html
+    """
     with UseDataBase(app.config["dbconfig"]) as cursor:
         _SQL = """select * from log;"""
         cursor.execute(_SQL)
