@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, session
 
 from subnet_calculation import Subnet
-from DB_context_mng import UseDataBase
+from DB_context_mng import UseDataBase, DBConnectionError, CredentialsError, SQLError
 from checker import check_logged_in
 
 
@@ -76,8 +76,10 @@ def calculate_res():
     subnet = Subnet(ip_address, prefix)
     subnet.calculate()
     result = subnet.SUBNET_INFO[subnet.address].items()
-    log_request(request, "; ".join(subnet.SUBNET_INFO[subnet.address].values()))
-
+    try:
+        log_request(request, "; ".join(subnet.SUBNET_INFO[subnet.address].values()))
+    except Exception as err:
+        print(f"Logging failed with this error: {str(err)}")
     return render_template("results.html",
                            the_title=title,
                            the_ip_address=ip_address,
@@ -93,18 +95,27 @@ def view_the_log():
 
     :return: html
     """
-    with UseDataBase(app.config["dbconfig"]) as cursor:
-        _SQL = """select * from log;"""
-        cursor.execute(_SQL)
-        contents = cursor.fetchall()
+    try:
+        with UseDataBase(app.config["dbconfig"]) as cursor:
+            _SQL = """select * from log;"""
+            cursor.execute(_SQL)
+            contents = cursor.fetchall()
 
-    titles = ("Id", "Time", "Form Data", "Results", "User_agent", "Remote_addr")
+        titles = ("Id", "Time", "Form Data", "Results", "User_agent", "Remote_addr")
 
-    return render_template("viewlog.html",
-                           the_title="View Log",
-                           the_row_titles=titles,
-                           the_data=contents,
-                           )
+        return render_template("viewlog.html",
+                               the_title="View Log",
+                               the_row_titles=titles,
+                               the_data=contents,
+                               )
+    except DBConnectionError as err:
+        print(f"Database connection failed. Error :  {str(err)}")
+    except CredentialsError as err:
+        print(f"User-id/Password issues. Error: {str(err)}")
+    except SQLError as err:
+        print(f"Is your query correct? Error: {str(err)}")
+    except Exception as err:
+        print(f"Something went wrong: {str(err)}")
 
 
 app.secret_key = "MayTheForceBeWithYou"
