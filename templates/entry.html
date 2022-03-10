@@ -3,7 +3,7 @@
 {% block body %}
 
 <h2>{{ the_title }}</h2>
-
+<p>{{ the_err_mes }}</p>
 <form method='POST' action='/result'>
 <table>
     <tr><td>IP address:</td><td>
@@ -20,6 +20,7 @@
 </form>
 <form method="POST" action="/viewlog">
     <p><input value='View logs' type='SUBMIT'></p>
+    <p>{{ not_log_mes }}</p>
 </form>
 
 {% endblock %}

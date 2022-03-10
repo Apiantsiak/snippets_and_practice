@@ -1,6 +1,6 @@
 """This module includes a decorator function that checks the user's authorization."""
 
-from flask import session
+from flask import session, render_template
 from functools import wraps
 
 
@@ -9,5 +9,8 @@ def check_logged_in(func):
     def wrapper(*args, **kwargs):
         if "logged_in" in session:
             return func(*args, **kwargs)
-        return "You are NOT logger in."
+        return render_template("entry.html",
+                               the_title="IP CALCULATOR",
+                               not_log_mes="Please Log in"
+                               )
     return wrapper
