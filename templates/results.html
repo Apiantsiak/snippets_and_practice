@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h2>{{ the_title }}</h2>
+
+<form method='POST' action='/entry'>
+<p>You submitted the following data:</p>
+
+<table>
+<tr><td>IP address:</td><td>{{ the_ip_address }}</td></tr>
+<tr><td>Subnet mask:</td><td>{{ the_prefix }}</td></tr>
+</table>
+
+<p>Subnet attributes:</p>
+
+<table>
+    {% for row in the_data %}
+    <tr>
+        {% for item in row %}
+        <td>{{ item }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<h3>{{ the_results }}</h3>
+    <p><input value="Back" type="submit"></p>
+</form>
+{% endblock %}

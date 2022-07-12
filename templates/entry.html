@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h2>{{ the_title }}</h2>
+<p>{{ the_err_mes }}</p>
+<form method='POST' action='/result'>
+<table>
+    <tr><td>IP address:</td><td>
+        <label for='ip_address'>
+        <input id='ip_address' name='ip_address' type='TEXT' width='60'></label>
+    </td></tr>
+    <tr><td>Subnet mask:</td><td>
+        <label for='prefix'>
+        <input id='prefix' name='prefix' type='TEXT'></label>
+    </td></tr>
+</table>
+<p>When you're ready, click Calculate</p>
+<p><input value='Calculate' type='SUBMIT'></p>
+</form>
+<form method="POST" action="/viewlog">
+    <p><input value='View logs' type='SUBMIT'></p>
+    <p>{{ not_log_mes }}</p>
+</form>
+
+{% endblock %}
